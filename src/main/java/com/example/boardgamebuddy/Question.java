@@ -1,4 +1,6 @@
 package com.example.boardgamebuddy;
 
-public record Question(String question) {
+import jakarta.validation.constraints.NotBlank;
+
+public record Question(@NotBlank(message = "Game Title is required") String gameTitle, @NotBlank(message = "Question is required") String question) {
 }

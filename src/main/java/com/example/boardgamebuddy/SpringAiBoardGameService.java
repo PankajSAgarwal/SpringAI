@@ -12,12 +12,20 @@ public class SpringAiBoardGameService implements BoardGameService{
         this.chatClient = chatClientBuilder.build();
     }
 
+    private static final String questionPromptTemplate = """
+            Answer this question about {gameTitle}: {question}
+            """;
+
     @Override
     public Answer askQuestion(Question question) {
         var answerText = chatClient.prompt()
-                .user(question.question())
+                .user(
+                        userSpec -> userSpec
+                                .text(questionPromptTemplate)
+                                .param("gameTitle", question.gameTitle())
+                                .param("question", question.question()))
                 .call()
                 .content();
-        return new Answer(answerText);
+        return new Answer(question.gameTitle(), answerText);
     }
 }

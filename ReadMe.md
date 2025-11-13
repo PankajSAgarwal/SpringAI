@@ -57,3 +57,8 @@ spring.ai.ollama.init.pull-model-strategy=when_missing
 Determine whether an answer is relevant to the given question 
 - Spring AI's `FactCheckingEvaluator`
 Instead of asking LLM to judge the relevancy of the answer to the question, it asks the LLM to judge whether the answer correctly answers the questions.
+## PromptTemplates
+- To test prompt template use the below command using HTTPie
+```shell
+http :8080/ask gameTitle="checkers" question="How many pieces are there?" -b
+```
