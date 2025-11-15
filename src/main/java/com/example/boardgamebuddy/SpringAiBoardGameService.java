@@ -27,7 +27,7 @@ public class SpringAiBoardGameService implements BoardGameService{
     @Override
     public Answer askQuestion(Question question) {
         var gameRules = gameRulesService.getRulesFor(question.gameTitle());
-        var answerText = chatClient.prompt()
+        return chatClient.prompt()
                 .system(
                         systemSpec -> systemSpec
                                 .text(promptTemplate)
@@ -35,7 +35,6 @@ public class SpringAiBoardGameService implements BoardGameService{
                                 .param("rules", gameRules))
                 .user(question.question())
                 .call()
-                .content();
-        return new Answer(question.gameTitle(), answerText);
+                .entity(Answer.class);
     }
 }
