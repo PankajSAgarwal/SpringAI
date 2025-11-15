@@ -91,3 +91,60 @@ logging.level.org.zalando.logbook = TRACE
 ```properties
 logbook.format.style=http
 ```
+## Adjusting variability
+Applying options like temperature, Top-P and Top-K are helpful in gaining some control over the choices made when LLM is generating a response
+### Setting the temperature globally in application.properties
+- OpenAI
+```properties
+spring.ai.openai.chat.options.temperature=0.7
+```
+- ollama
+```properties
+spring.ai.ollama.chat.options.temperature=0.7
+```
+
+### Setting temperature programmatically
+
+```java
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.ChatOptions;
+
+ChatOptions chatOptions = ChatOptions.builder()
+        .temperature(0.7)
+        .build();
+
+ChatClient chatClient = ChatClient.builder()
+        .defaultOptions(chatOptions)
+        .build();
+```
+### Setting top-p in application.properties
+
+```properties
+spring.ai.openai.chat.options.top-p=0.8
+```
+- ollama
+```properties
+spring.ai.ollama.chat.options.top-p=0.8
+```
+### Setting top-p programmatically
+
+```java
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.ChatOptions;
+
+ChatOptions chatOptions = ChatOptions.builder()
+        .topP(0.7)
+        .build();
+
+ChatClient chatClient = ChatClient.builder()
+        .defaultOptions(chatOptions)
+        .build();
+```
+### Setting top-k in application.properties
+
+- OpenAI does not support specifying Top-K when submitting a prompt
+- ollama
+```properties
+spring.ai.ollama.chat.options.top-k=4
+```
+
