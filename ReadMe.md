@@ -148,3 +148,23 @@ ChatClient chatClient = ChatClient.builder()
 spring.ai.ollama.chat.options.top-k=4
 ```
 
+## Streaming the response
+- code
+```java
+public Flux<String> askQuestion(Question question) {
+    var gameRules = gameRulesService.getRulesFor(question.gameTitle());
+    return chatClient.prompt()
+            .system(
+                    systemSpec -> systemSpec
+                            .text(promptTemplate)
+                            .param("gameTitle", question.gameTitle())
+                            .param("rules", gameRules))
+            .user(question.question())
+            .stream()
+            .content();
+    }
+```
+- Httpie request to stream
+```shell
+http :8080/ask gameTitle="Burger Battle" question="What battle cards are there?" -b --stream --pretty none
+```
