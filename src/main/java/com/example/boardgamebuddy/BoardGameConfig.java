@@ -10,6 +10,5 @@ public class BoardGameConfig {
     @Bean
     RestClientCustomizer logBookCustomizer(LogbookClientHttpRequestInterceptor interceptor) {
         return restClient -> restClient.requestInterceptor(interceptor);
-
     }
 }

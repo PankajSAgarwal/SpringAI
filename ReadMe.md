@@ -62,3 +62,32 @@ Instead of asking LLM to judge the relevancy of the answer to the question, it a
 ```shell
 http :8080/ask gameTitle="checkers" question="How many pieces are there?" -b
 ```
+
+## To see raw request and response sent and received from LLM
+- Add the below dependency
+```xml
+<dependency>
+    <groupId>org.zalando</groupId>
+    <artifactId>logbook-spring-boot-starter</artifactId>
+    <version>3.9.0</version>
+</dependency>
+```
+- Spring AI ChatClient uses Spring's `RestClient` under the covers, so declare a `RestClientCustomizer` bean to add Logbook's `LogbookClientHttpRequestInterceptor` as a request interceptor  
+```java
+import org.springframework.boot.web.client.RestClientCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor;
+@Bean
+RestClientCustomizer logBookCustomizer(LogbookClientHttpRequestInterceptor interceptor) {
+    return restClient -> restClient.requestInterceptor(interceptor);
+}
+```
+- Logbook logs request and response details at `TRACE` level,so set the logging level in the `application.properties` file to emit logging at this level.
+```properties
+logging.level.org.zalando.logbook = TRACE
+```
+- By default, Logbook logs the requests and responses in `JSON` format that can make it difficult to read request and responses. So optionally set `logbook.format.style=http`.
+
+```properties
+logbook.format.style=http
+```
